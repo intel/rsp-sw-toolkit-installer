@@ -17,10 +17,10 @@ echo "Gateway monolithic Java application along with its dependencies."
 echo "This script is designed to run on Debian 9 or Ubuntu 18.04 LTS."
 echo 
 echo "This script will also download and install the latest software"
-echo "repository for Intel® RFID Sensor Platforms (H1000/H3000/H4000)."
+echo "repository for Intel® RFID Sensor Platforms (H1000/H3000)."
 echo "By continuing with this installation, you agree to the terms in"
-echo "the End User License Agreemnt Intel-RSP-EULA-Agreement.pdf."
-echo "https://github.com/intel/rsp-sw-toolkit-installer/sensor-sw-repo"
+echo "the End User License Agreement Intel-RSP-EULA-Agreement.pdf."
+echo "https://github.com/intel/rsp-sw-toolkit-installer/tree/master/sensor-sw-repo"
 echo
 echo "IMPORTANT! PLEASE READ AND AGREE TO THIS EULA BEFORE CONTINUING!"
 echo 
