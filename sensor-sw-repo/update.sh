@@ -65,6 +65,8 @@ rm $(cat latest.txt) && \
 rm latest.txt
 
 echo
-echo "Sensor software repository installation complete."
+echo "DONE"
+echo "Connected sensors will periodically poll the sensor-sw-repo repository and "
+echo "will automatically update if newer version is available. No further action required."
 echo
 

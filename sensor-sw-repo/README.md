@@ -10,23 +10,29 @@ The terms of use for this software are outlined in the Intel® RSP EULA Agreemen
 
 
 ## Getting Started
+If you have used the installer to install the RFID Sensor Platform (Intel® RSP) Controller application, then you just need to run [step #3](#3-execute-the-update-script)
 
-If you are using one of the build.sh scripts from either the native, docker or edge-x directories, the sensor-sw-repo will automatically be installed.  However, if you only need to install an updated version, use the update.sh script from this repository and follow the steps outlined below.
-
-
-### Clone the RSP Installer Repository 
+### 1. Create Project Directory and Install GIT
 
 ``` 
 mkdir -p ~/projects
 cd ~/projects
 
 sudo apt -y install git
+```
+
+### 2. Clone the RSP Installer Repository
+
+``` 
 git clone https://github.com/intel/rsp-sw-toolkit-installer.git
 ```
 
-### Execute the Update Script 
+### 3. Execute the Update Script 
 
 ```
 cd ~/projects/rsp-sw-toolkit-installer/sensor-sw-repo
 ./update.sh
 ```
+<br/>  
+
+> __NOTE:__  Connected sensors will periodically poll the sensor-sw-repo directory and will automatically update if newer version is available.  No further action required.
