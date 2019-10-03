@@ -26,7 +26,7 @@ echo "IMPORTANT! PLEASE READ AND AGREE TO THIS EULA BEFORE CONTINUING!"
 echo
 read -p 'Press [Enter] to continue... or [Ctrl]-[C] to exit...'
 echo
-CURRENT_DIR=$(pwd)
+CURRENT_DIR="$(pwd)"
 
 echo "Checking Internet connectivity"
 echo
@@ -50,29 +50,29 @@ else
 fi
 echo
 cd ~
-HOME_DIR=$(pwd)
-PROJECTS_DIR=$HOME_DIR/projects
-DEPLOY_DIR=$HOME_DIR/deploy
+HOME_DIR="$(pwd)"
+PROJECTS_DIR="$HOME_DIR/projects"
+DEPLOY_DIR="$HOME_DIR/deploy"
 PATH=$PATH':/c/Program Files/openjdk/bin'
 
 if [ ! -d "$PROJECTS_DIR" ]; then
     echo "Creating the projects directory..."
-    mkdir $PROJECTS_DIR
+    mkdir "$PROJECTS_DIR"
 fi
-cd $PROJECTS_DIR
+cd "$PROJECTS_DIR"
 
 echo
 echo "Cloning the RSP SW Toolkit - Gateway..."
 if [ ! -d "$PROJECTS_DIR/rsp-sw-toolkit-gw" ]; then
-    cd $PROJECTS_DIR
+    cd "$PROJECTS_DIR"
     git clone https://github.com/intel/rsp-sw-toolkit-gw.git
 fi
-cd $PROJECTS_DIR/rsp-sw-toolkit-gw
+cd "$PROJECTS_DIR/rsp-sw-toolkit-gw"
 git pull
 ./gradlew.bat clean deploy
 
-RUN_DIR=$DEPLOY_DIR/rsp-sw-toolkit-gw
-cd $RUN_DIR
+RUN_DIR="$DEPLOY_DIR/rsp-sw-toolkit-gw"
+cd "$RUN_DIR"
 echo
 if [ ! -d "$RUN_DIR/cache" ]; then
     echo "Creating cache directory..."
@@ -87,26 +87,26 @@ fi
 
 if [ ! -d "$PROJECTS_DIR/rsp-sw-toolkit-installer/sensor-sw-repo" ]; then
     echo "Downloading the sensor software repository..."
-    cd $PROJECTS_DIR
+    cd "$PROJECTS_DIR"
     git clone https://github.com/intel/rsp-sw-toolkit-installer.git
 fi
-cd $PROJECTS_DIR/rsp-sw-toolkit-installer/
+cd "$PROJECTS_DIR/rsp-sw-toolkit-installer/"
 git pull
-cd $PROJECTS_DIR/rsp-sw-toolkit-installer/sensor-sw-repo
+cd "$PROJECTS_DIR/rsp-sw-toolkit-installer/sensor-sw-repo"
 
-TAR_BALL=$(ls hx000-rrs-repo-*.tgz)
+TAR_BALL="$(ls hx000-rrs-repo-*.tgz)"
 if [ -f "$TAR_BALL" ]; then
     echo "Copying sensor software repository to deploy folder..."
-    tar -xf ./$TAR_BALL
-    REPO_DIR=${TAR_BALL::-4}
+    tar -xf "./$TAR_BALL"
+    REPO_DIR="${TAR_BALL::-4}"
     if [ ! -d "$RUN_DIR/sensor-sw-repo/" ]; then
-        mkdir $RUN_DIR/sensor-sw-repo/
+        mkdir "$RUN_DIR/sensor-sw-repo/"
     fi
-    cp -R ./$REPO_DIR/* $RUN_DIR/sensor-sw-repo/
+    cp -R "./$REPO_DIR/*" "$RUN_DIR/sensor-sw-repo/"
 fi
 
 echo
 echo "Running the RSP SW Toolkit - Gateway..."
-cd $RUN_DIR
+cd "$RUN_DIR"
 ./run.bat
 

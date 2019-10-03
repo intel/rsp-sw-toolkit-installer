@@ -26,12 +26,12 @@ echo "IMPORTANT! PLEASE READ AND AGREE TO THIS EULA BEFORE CONTINUING!"
 echo 
 read -p 'Press [Enter] to continue... or [Ctrl]-[C] to exit...'
 echo
-CURRENT_DIR=$(pwd)
+CURRENT_DIR="$(pwd)"
 
 echo "Checking Internet connectivity"
 echo
-PING1=$(ping -c 1 8.8.8.8)
-PING2=$(ping -c 1 pool.ntp.org)
+PING1="$(ping -c 1 8.8.8.8)"
+PING2="$(ping -c 1 pool.ntp.org)"
 if [[ $PING1 == *"unreachable"* ]]; then
     echo "ERROR: No network connection found, exiting."
     exit 1
@@ -68,17 +68,17 @@ sudo apt -y install ntp ntp-doc ssh wget
 sudo apt -y autoremove
 
 echo
-PROJECTS_DIR=$HOME/projects
-DEPLOY_DIR=$HOME/deploy
+PROJECTS_DIR="$HOME/projects"
+DEPLOY_DIR="$HOME/deploy"
 
 if [ ! -d "$PROJECTS_DIR" ]; then
     echo "Creating the projects directory..."
-    mkdir $PROJECTS_DIR
+    mkdir "$PROJECTS_DIR"
 fi
-cd $PROJECTS_DIR
+cd "$PROJECTS_DIR"
 
 echo
-GIT_VERSION=$(git --version)
+GIT_VERSION="$(git --version)"
 if [[ $GIT_VERSION == *"git version"* ]]; then
     echo "Cloning the RSP SW Toolkit - Gateway..."
 else
@@ -86,14 +86,14 @@ else
     exit 1
 fi
 if [ ! -d "$PROJECTS_DIR/rsp-sw-toolkit-gw" ]; then
-    cd $PROJECTS_DIR
+    cd "$PROJECTS_DIR"
     git clone https://github.com/intel/rsp-sw-toolkit-gw.git
 fi
-cd $PROJECTS_DIR/rsp-sw-toolkit-gw
+cd "$PROJECTS_DIR/rsp-sw-toolkit-gw"
 git pull
 
 echo
-GRADLE_VERSION=$(gradle --version)
+GRADLE_VERSION="$(gradle --version)"
 if [[ $GRADLE_VERSION == *"Revision"* ]]; then
     echo "Deploying the RSP SW Toolkit - Gateway..."
 else
@@ -102,20 +102,20 @@ else
 fi
 gradle clean deploy
 
-JAVA_HOME=$(type -p java)
+JAVA_HOME="$(type -p java)"
 if [[ $JAVA_HOME == *"java"* ]]; then
     echo
 else
     echo "java did not install properly, exiting."
     exit 1
 fi
-RUN_DIR=$DEPLOY_DIR/rsp-sw-toolkit-gw
+RUN_DIR="$DEPLOY_DIR/rsp-sw-toolkit-gw"
 
 if [ ! -d "$RUN_DIR/cache" ]; then
     echo "Creating cache directory..."
-    mkdir $RUN_DIR/cache
+    mkdir "$RUN_DIR/cache"
     echo "Generating certificates..."
-    cd $RUN_DIR/cache && ../gen_keys.sh
+    cd "$RUN_DIR/cache" && ../gen_keys.sh
 fi
 echo
 if [ ! -f "$RUN_DIR/cache/keystore.p12" ]; then
@@ -125,12 +125,12 @@ fi
 
 if [ ! -d "$RUN_DIR/sensor-sw-repo" ]; then
     echo "Creating sensor-sw-repo directory..."
-    mkdir $RUN_DIR/sensor-sw-repo
+    mkdir "$RUN_DIR/sensor-sw-repo"
 fi
 echo "Purge old sensor software repository..."
-rm -rf $RUN_DIR/sensor-sw-repo/*
+rm -rf "$RUN_DIR/sensor-sw-repo/*"
 
-cd $RUN_DIR/sensor-sw-repo
+cd "$RUN_DIR/sensor-sw-repo"
 echo "Downloading the sensor software repository..."
 wget https://github.com/intel/rsp-sw-toolkit-installer/raw/master/sensor-sw-repo/latest.txt && \
 wget https://github.com/intel/rsp-sw-toolkit-installer/raw/master/sensor-sw-repo/$(cat latest.txt) && \
@@ -143,29 +143,29 @@ NTP_FILE="/etc/ntp.conf"
 TMP_FILE="/tmp/ntp.conf"
 NTP_STRING1="server 127.127.1.0 prefer"
 NTP_STRING2="fudge 127.127.22.1"
-END_OF_FILE=$(tail -n 3 $NTP_FILE)
+END_OF_FILE=$(tail -n 3 "$NTP_FILE")
 if [[ $END_OF_FILE == *"$NTP_STRING1"* ]]; then
   echo "Already configured!"
 else
   echo "Updating $NTP_FILE"
-  cp $NTP_FILE $TMP_FILE
-  echo >> $TMP_FILE
-  echo "# If you want to serve time locally with no Internet," >> $TMP_FILE
-  echo "# uncomment the next two lines" >> $TMP_FILE
-  echo $NTP_STRING1 >> $TMP_FILE
-  echo $NTP_STRING2 >> $TMP_FILE
-  echo >> $TMP_FILE
-  sudo cp $TMP_FILE $NTP_FILE
+  cp "$NTP_FILE" "$TMP_FILE"
+  echo >> "$TMP_FILE"
+  echo "# If you want to serve time locally with no Internet," >> "$TMP_FILE"
+  echo "# uncomment the next two lines" >> "$TMP_FILE"
+  echo "$NTP_STRING1" >> "$TMP_FILE"
+  echo "$NTP_STRING2" >> "$TMP_FILE"
+  echo >> "$TMP_FILE"
+  sudo cp "$TMP_FILE" "$NTP_FILE"
   sudo /etc/init.d/ntp restart
 fi
 
 echo
-cd $PROJECTS_DIR/rsp-sw-toolkit-installer/native
+cd "$PROJECTS_DIR/rsp-sw-toolkit-installer/native"
 if [ ! -f "$PROJECTS_DIR/rsp-sw-toolkit-installer/native/open-web-admin.sh" ]; then
     echo "WARNING: The script open-web-admin.sh was not found."
 else
-    $PROJECTS_DIR/rsp-sw-toolkit-installer/native/open-web-admin.sh &
+    "$PROJECTS_DIR/rsp-sw-toolkit-installer/native/open-web-admin.sh" &
 fi
 echo "Running the RSP SW Toolkit - Gateway..."
-cd $RUN_DIR
-$RUN_DIR/run.sh
+cd "$RUN_DIR"
+"$RUN_DIR/run.sh"
