@@ -17,6 +17,6 @@ To run the Intel® RSP Controller application in a Windows® 10 environment, fir
 This method will download and install the Intel® RSP Controller application  source code along with all of its runtime dependencies within a Docker environment.  The script will build and deploy three separate Docker Containers.  Clone this repository if you are familiar with how to do that.  Otherwise, use the web interface to download the build.sh script.  Place it in your home directory and run it as root (i.e. sudo ./build.sh).  The build.sh script is intended to run in a Debian Linux environment ONLY.
 
 
-### EdgeX Foundry Environment (Expected Q1'2020)
+### EdgeX Environment
 
-This method will download and install the Intel® RSP Controller application source code along with all of its runtime dependencies within an [EdgeX Foundry](https://www.edgexfoundry.org/) environment.  
+To install the Intel® RSP Controller application as a Device Service within the [EdgeX Foundry](https://www.edgexfoundry.org/) environment, follow these [instructions](https://github.com/intel/rsp-sw-toolkit-im-suite-mqtt-device-service/blob/master/README.md).  
