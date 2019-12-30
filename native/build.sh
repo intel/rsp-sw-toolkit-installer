@@ -14,18 +14,18 @@ echo "END-TO-END INVENTORY MANAGEMENT SOLUTION."
 echo
 echo "This script will download and install the Intel® RSP SW Toolkit-"
 echo "Gateway monolithic Java application along with its dependencies."
-echo "This script is designed to run on Debian 10 or Ubuntu 18.04 LTS."
+echo "This script is designed to run on Debian 9 or Ubuntu 18.04 LTS."
 echo 
-#echo "This script will also download and install the latest software"
-#echo "repository for Intel® RFID Sensor Platforms (H1000/H3000)."
-#echo "By continuing with this installation, you agree to the terms in"
-#echo "the End User License Agreement Intel-RSP-EULA-Agreement.pdf."
-#echo "https://github.com/intel/rsp-sw-toolkit-installer/tree/master/sensor-sw-repo"
-#echo
-#echo "IMPORTANT! PLEASE READ AND AGREE TO THIS EULA BEFORE CONTINUING!"
-#echo 
-#read -p 'Press [Enter] to continue... or [Ctrl]-[C] to exit...'
-#echo
+echo "This script will also download and install the latest software"
+echo "repository for Intel® RFID Sensor Platforms (H1000/H3000)."
+echo "By continuing with this installation, you agree to the terms in"
+echo "the End User License Agreement Intel-RSP-EULA-Agreement.pdf."
+echo "https://github.com/intel/rsp-sw-toolkit-installer/tree/master/sensor-sw-repo"
+echo
+echo "IMPORTANT! PLEASE READ AND AGREE TO THIS EULA BEFORE CONTINUING!"
+echo 
+read -p 'Press [Enter] to continue... or [Ctrl]-[C] to exit...'
+echo
 CURRENT_DIR="$(pwd)"
 
 echo "Checking Internet connectivity"
@@ -123,20 +123,20 @@ if [ ! -f "$RUN_DIR/cache/keystore.p12" ]; then
     exit 1
 fi
 
-#if [ ! -d "$RUN_DIR/sensor-sw-repo" ]; then
-#    echo "Creating sensor-sw-repo directory..."
-#    mkdir "$RUN_DIR/sensor-sw-repo"
-#fi
+if [ ! -d "$RUN_DIR/sensor-sw-repo" ]; then
+    echo "Creating sensor-sw-repo directory..."
+    mkdir "$RUN_DIR/sensor-sw-repo"
+fi
 echo "Purge old sensor software repository..."
 rm -rf "$RUN_DIR/sensor-sw-repo/*"
 
-#cd "$RUN_DIR/sensor-sw-repo"
-#echo "Downloading the sensor software repository..."
-#wget https://github.com/intel/rsp-sw-toolkit-installer/raw/master/sensor-sw-repo/latest.txt && \
-#wget https://github.com/intel/rsp-sw-toolkit-installer/raw/master/sensor-sw-repo/$(cat latest.txt) && \
-#tar -xvzf $(cat latest.txt) --strip=1 && \
-#rm $(cat latest.txt) && \
-#rm latest.txt
+cd "$RUN_DIR/sensor-sw-repo"
+echo "Downloading the sensor software repository..."
+wget https://github.com/intel/rsp-sw-toolkit-installer/raw/master/sensor-sw-repo/latest.txt && \
+wget https://github.com/intel/rsp-sw-toolkit-installer/raw/master/sensor-sw-repo/$(cat latest.txt) && \
+tar -xvzf $(cat latest.txt) --strip=1 && \
+rm $(cat latest.txt) && \
+rm latest.txt
 
 echo "Configuring NTP Server to serve time with no Internet ..."
 NTP_FILE="/etc/ntp.conf"
