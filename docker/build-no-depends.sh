@@ -14,10 +14,7 @@ echo "END-TO-END INVENTORY MANAGEMENT SOLUTION."
 echo
 echo "This script will download and install the Intel® RSP SW Toolkit-"
 echo "Gateway dockerized Java application."
-echo "This script is designed to run on Debian 9 or Ubuntu 18.04 LTS."
-echo 
-echo "This script will also download and install the latest software"
-echo "repository for Intel® RFID Sensor Platforms (H1000/H3000/H4000)."
+echo "This script is designed to run on Debian 10 or Ubuntu 18.04 LTS."
 echo
 CURRENT_DIR=$(pwd)
 

@@ -16,9 +16,6 @@ echo "This script will download and install the Intel® RSP SW Toolkit-"
 echo "Gateway monolithic Java application along with its dependencies."
 echo "This script is designed to run in a Windows 10 Git Bash terminal."
 echo
-echo "This script will also download and install the latest software"
-echo "repository for Intel® RFID Sensor Platforms (H1000/H3000/H4000)."
-echo
 CURRENT_DIR="$(pwd)"
 
 echo "Checking Internet connectivity"
@@ -76,26 +73,6 @@ fi
 if [ ! -f "$RUN_DIR/cache/keystore.p12" ]; then
     echo "Certificate creation failed, exiting."
     exit 1
-fi
-
-if [ ! -d "$PROJECTS_DIR/rsp-sw-toolkit-installer/sensor-sw-repo" ]; then
-    echo "Downloading the sensor software repository..."
-    cd "$PROJECTS_DIR"
-    git clone https://github.com/intel/rsp-sw-toolkit-installer.git
-fi
-cd "$PROJECTS_DIR/rsp-sw-toolkit-installer/"
-git pull
-cd "$PROJECTS_DIR/rsp-sw-toolkit-installer/sensor-sw-repo"
-
-TAR_BALL="$(ls hx000-rrs-repo-*.tgz)"
-if [ -f "$TAR_BALL" ]; then
-    echo "Copying sensor software repository to deploy folder..."
-    tar -xf "./$TAR_BALL"
-    REPO_DIR="${TAR_BALL::-4}"
-    if [ ! -d "$RUN_DIR/sensor-sw-repo/" ]; then
-        mkdir "$RUN_DIR/sensor-sw-repo/"
-    fi
-    cp -R "./$REPO_DIR/*" "$RUN_DIR/sensor-sw-repo/"
 fi
 
 echo

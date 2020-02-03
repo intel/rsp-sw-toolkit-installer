@@ -14,10 +14,7 @@ echo "END-TO-END INVENTORY MANAGEMENT SOLUTION."
 echo
 echo "This script will download and install the Intel® RSP SW Toolkit-"
 echo "Gateway monolithic Java application along with its dependencies."
-echo "This script is designed to run on Debian 9 or Ubuntu 18.04 LTS."
-echo 
-echo "This script will also download and install the latest software"
-echo "repository for Intel® RFID Sensor Platforms (H1000/H3000)."
+echo "This script is designed to run on Debian 10 or Ubuntu 18.04 LTS."
 echo
 CURRENT_DIR="$(pwd)"
 
@@ -120,16 +117,6 @@ if [ ! -d "$RUN_DIR/sensor-sw-repo" ]; then
     echo "Creating sensor-sw-repo directory..."
     mkdir "$RUN_DIR/sensor-sw-repo"
 fi
-echo "Purge old sensor software repository..."
-rm -rf "$RUN_DIR/sensor-sw-repo/*"
-
-cd "$RUN_DIR/sensor-sw-repo"
-echo "Downloading the sensor software repository..."
-wget https://github.com/intel/rsp-sw-toolkit-installer/raw/master/sensor-sw-repo/latest.txt && \
-wget https://github.com/intel/rsp-sw-toolkit-installer/raw/master/sensor-sw-repo/$(cat latest.txt) && \
-tar -xvzf $(cat latest.txt) --strip=1 && \
-rm $(cat latest.txt) && \
-rm latest.txt
 
 echo "Configuring NTP Server to serve time with no Internet ..."
 NTP_FILE="/etc/ntp.conf"
