@@ -7,6 +7,7 @@ version: "3.2"
 volumes:
   rsp-cache:
   rsp-config:
+  rsp-sensor-sw-repo:
   
 services:  
   avahi:
@@ -74,6 +75,7 @@ services:
     volumes:
       - rsp-cache:/opt/rsp-sw-toolkit-gw/cache/
       - rsp-config:/opt/rsp-sw-toolkit-gw/config/
+      - rsp-sensor-sw-repo:/opt/rsp-sw-toolkit-gw/sensor-sw-repo/
     # networks:
       # rsp_gw_net:
         # aliases:
