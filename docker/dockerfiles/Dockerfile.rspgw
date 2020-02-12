@@ -24,15 +24,8 @@ RUN cd ~/projects/rsp-sw-toolkit-gw && \
 	gradle clean deploy && \
 	mkdir -p /opt && \
 	mv ~/deploy/rsp-sw-toolkit-gw /opt/ && \
-	rm -fr ~/projects/ ~/deploy/
-
-RUN mkdir /opt/rsp-sw-toolkit-gw/sensor-sw-repo && \
-  cd /opt/rsp-sw-toolkit-gw/sensor-sw-repo && \
-  wget https://github.com/intel/rsp-sw-toolkit-installer/raw/master/sensor-sw-repo/latest.txt && \
-  wget https://github.com/intel/rsp-sw-toolkit-installer/raw/master/sensor-sw-repo/$(cat latest.txt) && \
-  tar -xvzf $(cat latest.txt) --strip=1 && \
-  rm $(cat latest.txt) && \
-  rm latest.txt
+	rm -fr ~/projects/ ~/deploy/ && \
+        mkdir /opt/rsp-sw-toolkit-gw/sensor-sw-repo
 	
 COPY init.rspgw /bin/init
 	
