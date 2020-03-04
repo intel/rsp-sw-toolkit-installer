@@ -42,12 +42,20 @@ fi
 echo
 printDatedMsg "Updating apt..."
 sudo apt update
-sudo apt -y install tar default-jdk git gradle 
-sudo apt -y install mosquitto mosquitto-clients avahi-daemon
-sudo apt -y install ntp ntp-doc ssh wget
-sudo apt -y autoremove
 
-echo
+printDatedMsg "Installing the following dependencies..."
+printDatedMsg "    tar openjdk git gradle"
+printDatedMsg "    mosquitto mosquitto-clients"
+printDatedMsg "    avahi-daemon ntp ssh wget"
+sudo apt -y install tar default-jdk git gradle \
+                    mosquitto mosquitto-clients \
+                    avahi-daemon ntp ntp-doc ssh wget
+if [ $? -ne 0 ]; then
+    printDatedErrMsg "There was a problem installing dependencies, exiting"
+    exit 1
+fi
+
+
 PROJECTS_DIR="$HOME/projects"
 DEPLOY_DIR="$HOME/deploy"
 
