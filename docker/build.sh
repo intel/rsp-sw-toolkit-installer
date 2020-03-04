@@ -50,6 +50,24 @@ printDatedMsg "    docker bash curl ntpdate"
 echo
 sudo apt -y install docker.io bash curl ntpdate
 
+printDatedMsg "Checking for docker-compose..."
+which docker-compose
+if [ $? -ne 0 ]; then
+    printDatedInfoMsg "docker-compose not found, installing..."
+    sudo curl -L "https://github.com/docker/compose/releases/download/1.24.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && sudo chmod a+x /usr/local/bin/docker-compose
+    if [ $? -ne 0 ]; then
+        printDatedOkMsg "Installed docker-compose"
+        docker-compose --version
+    else
+        printDatedErrMsg "Problem installing docker-compose"
+        exit 1
+    fi
+else
+    printDatedOkMsg "docker-compose found"
+    docker-compose --version
+fi
+
+
 systemctl enable docker
 
 echo
