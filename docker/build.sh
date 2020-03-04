@@ -3,39 +3,41 @@
 # Copyright (c) 2019 Intel Corporation
 # SPDX-License-Identifier: BSD-3-Clause 
 #
+source "scripts/textutils.sh"
 
 clear
-echo
-echo "The features and functionality included in this reference design"
-echo "are intended to showcase the capabilities of the Intel® RSP by"
-echo "demonstrating the use of the API to collect and process RFID tag"
-echo "read information. THIS SOFTWARE IS NOT INTENDED TO BE A COMPLETE"
-echo "END-TO-END INVENTORY MANAGEMENT SOLUTION."
-echo
-echo "This script will download and install the Intel® RSP SW Toolkit-"
-echo "Gateway dockerized Java application along with its dependencies."
-echo "This script is designed to run on Debian 10 or Ubuntu 18.04 LTS."
-echo
+printMsg ""
+printMsg "The features and functionality included in this reference design"
+printMsg "are intended to showcase the capabilities of the Intel® RSP by"
+printMsg "demonstrating the use of the API to collect and process RFID tag"
+printMsg "read information. THIS SOFTWARE IS NOT INTENDED TO BE A COMPLETE"
+printMsg "END-TO-END INVENTORY MANAGEMENT SOLUTION."
+printMsg
+printMsg "This script will download and install the Intel® RSP SW Toolkit-"
+printMsg "Gateway dockerized Java application along with its dependencies."
+printMsg "This script is designed to run on Debian 10 or Ubuntu 18.04 LTS."
+printMsg ""
 CURRENT_DIR=$(pwd)
 
-echo "Checking Internet connectivity"
+printMsg "Checking Internet connectivity"
 echo
+
 PING1=$(ping -c 1 8.8.8.8)
 PING2=$(ping -c 1 pool.ntp.org)
 if [[ $PING1 == *"unreachable"* ]]; then
-    echo "ERROR: No network connection found, exiting."
+    printDatedErrMsg "ERROR: No network connection found, exiting."
     exit 1
 elif [[ $PING1 == *"100% packet loss"* ]]; then
-    echo "ERROR: No Internet connection found, exiting."
+    printDatedErrMsg "ERROR: No Internet connection found, exiting."
     exit 1
 else
     if [[ $PING2 == *"not known"* ]]; then
-        echo "ERROR: Cannot resolve pool.ntp.org."
-        echo "Is your network blocking IGMP ping?"
-        echo "exiting"
+        printDatedErrMsg "ERROR: Cannot resolve pool.ntp.org."
+        printDatedInfoMsg "Is your network blocking IGMP ping?"
+        printDatedErrMsg "exiting"
         exit 1
     else
-        echo "Connectivity OK"
+        printDatedOkMsg "Connectivity OK"
     fi
 fi
 
@@ -57,7 +59,7 @@ systemctl enable docker
 echo
 PROJECTS_DIR=$HOME/projects
 if [ ! -d "$PROJECTS_DIR" ]; then
-    echo "Creating the projects directory..."
+    printDatedMsg "Creating the projects directory..."
     mkdir $PROJECTS_DIR
 fi
 cd $PROJECTS_DIR
@@ -65,9 +67,9 @@ cd $PROJECTS_DIR
 echo
 GIT_VERSION=$(git --version)
 if [[ $GIT_VERSION == *"git version"* ]]; then
-    echo "Cloning the RSP SW Toolkit - Installer..."
+    printDatedMsg "Cloning the RSP SW Toolkit - Installer..."
 else
-    echo "git did not install properly, exiting."
+    printDatedErrMsg "git did not install properly, exiting."
     exit 1
 fi
 if [ ! -d "$PROJECTS_DIR/rsp-sw-toolkit-installer" ]; then
@@ -81,7 +83,6 @@ git pull
 set -u
 
 cd $PROJECTS_DIR/rsp-sw-toolkit-installer/docker/
-source "scripts/textutils.sh"
 
 if [ "${HTTP_PROXY+x}" != "" ]; then
 	export DOCKER_BUILD_ARGS="--build-arg http_proxy='${http_proxy}' --build-arg https_proxy='${https_proxy}' --build-arg HTTP_PROXY='${HTTP_PROXY}' --build-arg HTTPS_PROXY='${HTTPS_PROXY}' --build-arg NO_PROXY='localhost,127.0.0.1'"
