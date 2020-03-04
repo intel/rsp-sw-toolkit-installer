@@ -94,7 +94,7 @@ else
 	export AWS_CLI_PROXY=""
 fi
 
-# Build Managed Edge Accelerator
+# Build RSP Gateway
 msg="Building the containers, this can take a few minutes..."
 printBanner $msg
 logMsg $msg
