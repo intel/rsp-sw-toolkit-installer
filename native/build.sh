@@ -60,14 +60,14 @@ elif [[ $PING1 == *"100% packet loss"* ]]; then
     exit 1
 fi
 PING2="$(ping -c 1 pool.ntp.org)"
-    if [[ $PING2 == *"not known"* ]]; then
-        printDatedErrMsg "ERROR: Cannot resolve pool.ntp.org."
-        printDatedInfoMsg "Is your network blocking IGMP ping?"
-        printDatedErrMsg "exiting"
-        exit 1
-    else
-        printDatedOkMsg "Connectivity OK"
-    fi
+if [[ $PING2 == *"not known"* ]]; then
+    printDatedErrMsg "ERROR: Cannot resolve pool.ntp.org."
+    printDatedInfoMsg "Is your network blocking IGMP ping?"
+    printDatedErrMsg "exiting"
+    exit 1
+else
+    printDatedOkMsg "Connectivity OK"
+fi
 
 echo
 printDatedMsg "Updating apt..."
