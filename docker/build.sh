@@ -14,7 +14,7 @@ printMsg "read information. THIS SOFTWARE IS NOT INTENDED TO BE A COMPLETE"
 printMsg "END-TO-END INVENTORY MANAGEMENT SOLUTION."
 printMsg
 printMsg "This script will download and install the Intel® RSP SW Toolkit-"
-printMsg "Gateway dockerized Java application along with its dependencies."
+printMsg "Controller dockerized Java application along with its dependencies."
 printMsg "This script is designed to run on Debian 10 or Ubuntu 18.04 LTS."
 printMsg ""
 CURRENT_DIR=$(pwd)
@@ -108,7 +108,7 @@ else
 	export AWS_CLI_PROXY=""
 fi
 
-# Build RSP Gateway
+# Build RSP Controller
 msg="Building the containers, this can take a few minutes..."
 printBanner $msg
 logMsg $msg

@@ -13,7 +13,7 @@ echo "read information. THIS SOFTWARE IS NOT INTENDED TO BE A COMPLETE"
 echo "END-TO-END INVENTORY MANAGEMENT SOLUTION."
 echo
 echo "This script will download and install the Intel® RSP SW Toolkit-"
-echo "Gateway monolithic Java application along with its dependencies."
+echo "Controller monolithic Java application along with its dependencies."
 echo "This script is designed to run in a Windows 10 Git Bash terminal."
 echo
 CURRENT_DIR="$(pwd)"

@@ -13,7 +13,7 @@ echo "read information. THIS SOFTWARE IS NOT INTENDED TO BE A COMPLETE"
 echo "END-TO-END INVENTORY MANAGEMENT SOLUTION."
 echo
 echo "This script will download and install the Intel® RSP SW Toolkit-"
-echo "Gateway dockerized Java application."
+echo "Controller dockerized Java application."
 echo "This script is designed to run on Debian 10 or Ubuntu 18.04 LTS."
 echo
 CURRENT_DIR=$(pwd)
