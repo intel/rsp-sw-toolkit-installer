@@ -83,7 +83,7 @@ git pull
 echo
 GRADLE_VERSION="$(gradle --version)"
 if [[ $GRADLE_VERSION == *"Revision"* ]]; then
-    printDatedMsg "Deploying the RSP SW Toolkit - Gateway..."
+    printDatedMsg "Deploying the RSP SW Toolkit - Controller..."
 else
     printDatedErrMsg "gradle did not install properly, exiting."
     exit 1
@@ -144,6 +144,5 @@ if [ ! -f "$PROJECTS_DIR/rsp-sw-toolkit-installer/native/open-web-admin.sh" ]; t
 else
     "$PROJECTS_DIR/rsp-sw-toolkit-installer/native/open-web-admin.sh" &
 fi
-printDatedMsg "Running the RSP SW Toolkit - Gateway..."
-cd "$RUN_DIR"
+printDatedMsg "Running the RSP SW Toolkit - Controller..."
 "$RUN_DIR/run.sh"

@@ -52,7 +52,7 @@ fi
 cd "$PROJECTS_DIR"
 
 echo
-echo "Cloning the RSP SW Toolkit - Gateway..."
+echo "Cloning the RSP SW Toolkit - Controller..."
 if [ ! -d "$PROJECTS_DIR/rsp-sw-toolkit-gw" ]; then
     cd "$PROJECTS_DIR"
     git clone https://github.com/intel/rsp-sw-toolkit-gw.git
@@ -76,7 +76,7 @@ if [ ! -f "$RUN_DIR/cache/keystore.p12" ]; then
 fi
 
 echo
-echo "Running the RSP SW Toolkit - Gateway..."
+echo "Running the RSP SW Toolkit - Controller..."
 cd "$RUN_DIR"
 ./run.bat
 
