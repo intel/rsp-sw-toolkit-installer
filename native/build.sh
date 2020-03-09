@@ -100,7 +100,7 @@ cd "$PROJECTS_DIR" || {
 echo
 GIT_VERSION="$(git --version)"
 if [[ $GIT_VERSION == *"git version"* ]]; then
-    printDatedMsg "Cloning the RSP SW Toolkit - Controller..."
+    printDatedOkMsg "Found git..."
 else
     printDatedErrMsg "git did not install properly, exiting."
     exit 1
@@ -110,6 +110,7 @@ if [ ! -d "$PROJECTS_DIR/rsp-sw-toolkit-gw" ]; then
         printDatedErrMsg "Can't find the projects directory"
         exit 1
     }
+    printDatedMsg "Going to clone the RSP SW Toolkit - Controller..."
     git clone https://github.com/intel/rsp-sw-toolkit-gw.git
 fi
 cd "$PROJECTS_DIR/rsp-sw-toolkit-gw" || {
@@ -166,8 +167,8 @@ else
     printDatedMsg "Updating $NTP_FILE"
     cp "$NTP_FILE" "$TMP_FILE"
     echo >>"$TMP_FILE"
-    printDatedInfoMsg "# If you want to serve time locally with no Internet," >>"$TMP_FILE"
-    printDatedInfoMsg "# uncomment the next two lines" >>"$TMP_FILE"
+    echo "# If you want to serve time locally with no Internet," >>"$TMP_FILE"
+    echo "# uncomment the next two lines" >>"$TMP_FILE"
     echo "$NTP_STRING1" >>"$TMP_FILE"
     echo "$NTP_STRING2" >>"$TMP_FILE"
     echo >>"$TMP_FILE"
