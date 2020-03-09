@@ -45,9 +45,9 @@ printDatedMsg "Updating apt..."
 sudo apt update
 
 printDatedMsg "Installing the following dependencies..."
-printDatedMsg "    docker bash curl ntpdate"
+printDatedMsg "    docker bash curl ntpdate git"
 echo
-sudo apt -y install docker.io bash curl ntpdate
+sudo apt -y install docker.io bash curl ntpdate git
 
 printDatedMsg "Checking for docker-compose..."
 which docker-compose
@@ -65,7 +65,6 @@ else
     printDatedOkMsg "docker-compose found"
     docker-compose --version
 fi
-
 
 systemctl enable docker
 
