@@ -17,7 +17,6 @@ printMsg "This script will download and install the Intel® RSP SW Toolkit-"
 printMsg "Controller dockerized Java application along with its dependencies."
 printMsg "This script is designed to run on Debian 10 or Ubuntu 18.04 LTS."
 printMsg ""
-CURRENT_DIR=$(pwd)
 
 printMsg "Checking Internet connectivity"
 echo
