@@ -1,9 +1,40 @@
 #!/bin/bash
 #
 # Copyright (c) 2019 Intel Corporation
-# SPDX-License-Identifier: BSD-3-Clause 
+# SPDX-License-Identifier: BSD-3-Clause
 #
-source "scripts/textutils.sh"
+
+C_RED='\e[31m'
+C_GREEN='\e[32m'
+C_BLUE='\e[34m'
+C_YELLOW='\e[33m'
+
+T_RESET='\e[0m'
+T_BOLD='\e[1m'
+
+T_ERR="${T_BOLD}\e[31;1m"
+T_ERR_ICON="[${T_BOLD}${C_RED}✗${T_RESET}]"
+
+T_OK_ICON="[${T_BOLD}${C_GREEN}✓${T_RESET}]"
+T_INFO_ICON="[${T_BOLD}${C_YELLOW}i${T_RESET}]"
+
+printMsg() { echo -e "${1}" 2>&1; }
+
+printDatedMsg() {
+    printMsg "${C_BLUE}$(date +"%Y-%m-%d %I:%M:%S")${T_RESET} - ${1}${T_RESET}"
+}
+
+printDatedInfoMsg() {
+    printMsg "${C_BLUE}$(date +"%Y-%m-%d %I:%M:%S")${T_RESET} - ${T_INFO_ICON} ${1}${T_RESET}"
+}
+
+printDatedErrMsg() {
+    printMsg "${C_BLUE}$(date +"%Y-%m-%d %I:%M:%S")${T_RESET} - ${T_ERR_ICON}${T_ERR} $1${T_RESET}"
+}
+
+printDatedOkMsg() {
+    printMsg "${C_BLUE}$(date +"%Y-%m-%d %I:%M:%S")${T_RESET} - ${T_OK_ICON} $1${T_RESET}"
+}
 
 clear
 printMsg ""
