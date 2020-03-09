@@ -78,13 +78,12 @@ printDatedMsg "    tar openjdk git gradle"
 printDatedMsg "    mosquitto mosquitto-clients"
 printDatedMsg "    avahi-daemon ntp ssh wget"
 sudo apt -y install tar default-jdk git gradle \
-                    mosquitto mosquitto-clients \
-                    avahi-daemon ntp ntp-doc ssh wget
+    mosquitto mosquitto-clients \
+    avahi-daemon ntp ntp-doc ssh wget
 if [ $? -ne 0 ]; then
     printDatedErrMsg "There was a problem installing dependencies, exiting"
     exit 1
 fi
-
 
 PROJECTS_DIR="$HOME/projects"
 DEPLOY_DIR="$HOME/deploy"
@@ -93,21 +92,30 @@ if [ ! -d "$PROJECTS_DIR" ]; then
     printDatedMsg "Creating the projects directory..."
     mkdir "$PROJECTS_DIR"
 fi
-cd "$PROJECTS_DIR"
+cd "$PROJECTS_DIR" || {
+    printDatedErrMsg "Can't find the projects directory"
+    exit 1
+}
 
 echo
 GIT_VERSION="$(git --version)"
 if [[ $GIT_VERSION == *"git version"* ]]; then
-    printDatedMsg "Cloning the RSP SW Toolkit - Gateway..."
+    printDatedMsg "Cloning the RSP SW Toolkit - Controller..."
 else
     printDatedErrMsg "git did not install properly, exiting."
     exit 1
 fi
 if [ ! -d "$PROJECTS_DIR/rsp-sw-toolkit-gw" ]; then
-    cd "$PROJECTS_DIR"
+    cd "$PROJECTS_DIR" || {
+        printDatedErrMsg "Can't find the projects directory"
+        exit 1
+    }
     git clone https://github.com/intel/rsp-sw-toolkit-gw.git
 fi
-cd "$PROJECTS_DIR/rsp-sw-toolkit-gw"
+cd "$PROJECTS_DIR/rsp-sw-toolkit-gw" || {
+    printDatedErrMsg "Can't find the projects toolkit directory"
+    exit 1
+}
 git pull
 
 echo
@@ -153,26 +161,33 @@ NTP_STRING1="server 127.127.1.0 prefer"
 NTP_STRING2="fudge 127.127.22.1"
 END_OF_FILE=$(tail -n 3 "$NTP_FILE")
 if [[ $END_OF_FILE == *"$NTP_STRING1"* ]]; then
-  printDatedOkMsg "Already Configured"
+    printDatedOkMsg "Already Configured"
 else
-  printDatedMsg "Updating $NTP_FILE"
-  cp "$NTP_FILE" "$TMP_FILE"
-  echo >> "$TMP_FILE"
-  printDatedInfoMsg "# If you want to serve time locally with no Internet," >> "$TMP_FILE"
-  printDatedInfoMsg "# uncomment the next two lines" >> "$TMP_FILE"
-  echo "$NTP_STRING1" >> "$TMP_FILE"
-  echo "$NTP_STRING2" >> "$TMP_FILE"
-  echo >> "$TMP_FILE"
-  sudo cp "$TMP_FILE" "$NTP_FILE"
-  sudo /etc/init.d/ntp restart
+    printDatedMsg "Updating $NTP_FILE"
+    cp "$NTP_FILE" "$TMP_FILE"
+    echo >>"$TMP_FILE"
+    printDatedInfoMsg "# If you want to serve time locally with no Internet," >>"$TMP_FILE"
+    printDatedInfoMsg "# uncomment the next two lines" >>"$TMP_FILE"
+    echo "$NTP_STRING1" >>"$TMP_FILE"
+    echo "$NTP_STRING2" >>"$TMP_FILE"
+    echo >>"$TMP_FILE"
+    sudo cp "$TMP_FILE" "$NTP_FILE"
+    sudo /etc/init.d/ntp restart
 fi
 
 echo
-cd "$PROJECTS_DIR/rsp-sw-toolkit-installer/native"
+cd "$PROJECTS_DIR/rsp-sw-toolkit-installer/native" || {
+    printDatedErrMsg "Can't find the native directory"
+    exit 1
+}
 if [ ! -f "$PROJECTS_DIR/rsp-sw-toolkit-installer/native/open-web-admin.sh" ]; then
     printDatedInfoMsg "WARNING: The script open-web-admin.sh was not found."
 else
     "$PROJECTS_DIR/rsp-sw-toolkit-installer/native/open-web-admin.sh" &
 fi
 printDatedMsg "Running the RSP SW Toolkit - Controller..."
+cd "$RUN_DIR" || {
+    printDatedErrMsg "Can't find the run directory"
+    exit 1
+}
 "$RUN_DIR/run.sh"

@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # Copyright (c) 2019 Intel Corporation
-# SPDX-License-Identifier: BSD-3-Clause 
+# SPDX-License-Identifier: BSD-3-Clause
 #
 source "scripts/textutils.sh"
 
