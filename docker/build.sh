@@ -31,14 +31,14 @@ elif [[ $PING1 == *"100% packet loss"* ]]; then
 fi
 
 PING2=$(ping -c 1 pool.ntp.org)
-    if [[ $PING2 == *"not known"* ]]; then
-        printDatedErrMsg "ERROR: Cannot resolve pool.ntp.org."
-        printDatedInfoMsg "Is your network blocking IGMP ping?"
-        printDatedErrMsg "exiting"
-        exit 1
-    else
-        printDatedOkMsg "Connectivity OK"
-    fi
+if [[ $PING2 == *"not known"* ]]; then
+    printDatedErrMsg "ERROR: Cannot resolve pool.ntp.org."
+    printDatedInfoMsg "Is your network blocking IGMP ping?"
+    printDatedErrMsg "exiting"
+    exit 1
+else
+    printDatedOkMsg "Connectivity OK"
+fi
 
 echo
 printDatedMsg "Updating apt..."
@@ -97,13 +97,13 @@ set -u
 cd $PROJECTS_DIR/rsp-sw-toolkit-installer/docker/
 
 if [ "${HTTP_PROXY+x}" != "" ]; then
-	export DOCKER_BUILD_ARGS="--build-arg http_proxy='${http_proxy}' --build-arg https_proxy='${https_proxy}' --build-arg HTTP_PROXY='${HTTP_PROXY}' --build-arg HTTPS_PROXY='${HTTPS_PROXY}' --build-arg NO_PROXY='localhost,127.0.0.1'"
-	export DOCKER_RUN_ARGS="--env http_proxy='${http_proxy}' --env https_proxy='${https_proxy}' --env HTTP_PROXY='${HTTP_PROXY}' --env HTTPS_PROXY='${HTTPS_PROXY}' --env NO_PROXY='localhost,127.0.0.1'"
-	export AWS_CLI_PROXY="export http_proxy='${http_proxy}'; export https_proxy='${https_proxy}'; export HTTP_PROXY='${HTTP_PROXY}'; export HTTPS_PROXY='${HTTPS_PROXY}'; export NO_PROXY='localhost,127.0.0.1';"
+    export DOCKER_BUILD_ARGS="--build-arg http_proxy='${HTTP_PROXY}' --build-arg https_proxy='${HTTPS_PROXY}' --build-arg HTTP_PROXY='${HTTP_PROXY}' --build-arg HTTPS_PROXY='${HTTPS_PROXY}' --build-arg NO_PROXY='localhost,127.0.0.1'"
+    export DOCKER_RUN_ARGS="--env http_proxy='${HTTP_PROXY}' --env https_proxy='${HTTPS_PROXY}' --env HTTP_PROXY='${HTTP_PROXY}' --env HTTPS_PROXY='${HTTPS_PROXY}' --env NO_PROXY='localhost,127.0.0.1'"
+    export AWS_CLI_PROXY="export http_proxy='${HTTP_PROXY}'; export https_proxy='${HTTPS_PROXY}'; export HTTP_PROXY='${HTTP_PROXY}'; export HTTPS_PROXY='${HTTPS_PROXY}'; export NO_PROXY='localhost,127.0.0.1';"
 else
-	export DOCKER_BUILD_ARGS=""
-	export DOCKER_RUN_ARGS=""
-	export AWS_CLI_PROXY=""
+    export DOCKER_BUILD_ARGS=""
+    export DOCKER_RUN_ARGS=""
+    export AWS_CLI_PROXY=""
 fi
 
 # Build RSP Controller
