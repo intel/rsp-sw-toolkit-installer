@@ -82,7 +82,7 @@ logErrMsg() {
     logMsg "ERROR $1"
 }
 
-logFataErrMsg() {
+logFatalErrMsg() {
     logErrMsg "$1"
     echo -e "${T_ERR}Preview:${T_RESET}" 2>&1
     tail -n 3 ${LOG_FILE} 2>&1
