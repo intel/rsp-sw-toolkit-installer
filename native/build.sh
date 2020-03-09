@@ -48,7 +48,6 @@ printMsg "This script will download and install the Intel® RSP SW Toolkit-"
 printMsg "Controller monolithic Java application along with its dependencies."
 printMsg "This script is designed to run on Debian 10 or Ubuntu 18.04 LTS."
 printMsg ""
-CURRENT_DIR="$(pwd)"
 
 printDatedMsg "Checking Internet connectivity"
 PING1="$(ping -c 1 8.8.8.8)"
