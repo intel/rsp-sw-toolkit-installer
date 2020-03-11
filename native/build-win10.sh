@@ -13,7 +13,7 @@ echo "read information. THIS SOFTWARE IS NOT INTENDED TO BE A COMPLETE"
 echo "END-TO-END INVENTORY MANAGEMENT SOLUTION."
 echo
 echo "This script will download and install the Intel® RSP SW Toolkit-"
-echo "Gateway monolithic Java application along with its dependencies."
+echo "Controller monolithic Java application along with its dependencies."
 echo "This script is designed to run in a Windows 10 Git Bash terminal."
 echo
 CURRENT_DIR="$(pwd)"
@@ -52,7 +52,7 @@ fi
 cd "$PROJECTS_DIR"
 
 echo
-echo "Cloning the RSP SW Toolkit - Gateway..."
+echo "Cloning the RSP SW Toolkit - Controller..."
 if [ ! -d "$PROJECTS_DIR/rsp-sw-toolkit-gw" ]; then
     cd "$PROJECTS_DIR"
     git clone https://github.com/intel/rsp-sw-toolkit-gw.git
@@ -76,7 +76,7 @@ if [ ! -f "$RUN_DIR/cache/keystore.p12" ]; then
 fi
 
 echo
-echo "Running the RSP SW Toolkit - Gateway..."
+echo "Running the RSP SW Toolkit - Controller..."
 cd "$RUN_DIR"
 ./run.bat
 
