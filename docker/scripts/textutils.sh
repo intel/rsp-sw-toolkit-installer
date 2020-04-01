@@ -9,29 +9,15 @@ C_RED='\e[31m'
 C_GREEN='\e[32m'
 C_YELLOW='\e[33m'
 C_BLUE='\e[34m'
-C_MAGENTA='\e[35m'
-C_CYAN='\e[36m'
-C_WHITE='\e[37m'
-
-C_GRAY='\e[30;1m'
-C_L_RED='\e[31;1m'
-C_L_GREEN='\e[32;1m'
-C_L_YELLOW='\e[33;1m'
-C_L_BLUE='\e[34;1m'
-C_L_MAGENTA='\e[35;1m'
-C_L_CYAN='\e[36;1m'
-C_L_WHITE='\e[37;1m'
 
 T_RESET='\e[0m'
 T_BOLD='\e[1m'
-T_ULINE='\e[4m'
 
 T_ERR="${T_BOLD}\e[31;1m"
 T_ERR_ICON="[${T_BOLD}${C_RED}✗${T_RESET}]"
 
 T_OK_ICON="[${T_BOLD}${C_GREEN}✓${T_RESET}]"
 T_INFO_ICON="[${T_BOLD}${C_YELLOW}i${T_RESET}]"
-T_QST_ICON="${T_BOLD}[?]${T_RESET}"
 
 printMsg() {
     echo -e "${1}" 2>&1

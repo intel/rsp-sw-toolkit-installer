@@ -8,8 +8,8 @@ volumes:
   rsp-cache:
   rsp-config:
   rsp-sensor-sw-repo:
-  
-services:  
+
+services:
   avahi:
     image: rsp/avahi:0.1
     # environment:
@@ -20,7 +20,9 @@ services:
     # pid: host
     # userns_mode: host
     privileged: true
-    restart: always
+    # Try to restart avahi,
+    # but if it fails 5 times give up
+    restart: on-failure:5
     # networks:
       # - rsp_gw_net
     volumes:
@@ -31,10 +33,10 @@ services:
         # constraints: [node.platform.os == linux]
 
   ntp:
-    image: rsp/ntp:0.1   
+    image: rsp/ntp:0.1
     network_mode: host
     cap_add:
-     - SYS_TIME
+      - SYS_TIME
     restart: always
 
   mosquitto:
@@ -58,7 +60,7 @@ services:
         # constraints: [node.platform.os == linux]
     depends_on:
       - avahi
-      
+
   rsp-gw:
     image: rsp/sw-toolkit-gw:0.1
     environment:
@@ -85,8 +87,8 @@ services:
       - 8080:8080
       - 8443:8443
     # deploy:
-      # mode: global
-      # placement:
-        # constraints: [node.platform.os == linux]
+    #   mode: global
+    #   placement:
+    #     constraints: [node.platform.os == linux]
     depends_on:
       - mosquitto

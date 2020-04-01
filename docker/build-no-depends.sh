@@ -1,90 +1,122 @@
 #!/bin/bash
 #
 # Copyright (c) 2019 Intel Corporation
-# SPDX-License-Identifier: BSD-3-Clause 
+# SPDX-License-Identifier: BSD-3-Clause
 #
+source "scripts/textutils.sh"
 
 clear
-echo
-echo "The features and functionality included in this reference design"
-echo "are intended to showcase the capabilities of the Intel® RSP by"
-echo "demonstrating the use of the API to collect and process RFID tag"
-echo "read information. THIS SOFTWARE IS NOT INTENDED TO BE A COMPLETE"
-echo "END-TO-END INVENTORY MANAGEMENT SOLUTION."
-echo
-echo "This script will download and install the Intel® RSP SW Toolkit-"
-echo "Controller dockerized Java application."
-echo "This script is designed to run on Debian 10 or Ubuntu 18.04 LTS."
-echo
-CURRENT_DIR=$(pwd)
+printMsg ""
+printMsg "The features and functionality included in this reference design"
+printMsg "are intended to showcase the capabilities of the Intel® RSP by"
+printMsg "demonstrating the use of the API to collect and process RFID tag"
+printMsg "read information. THIS SOFTWARE IS NOT INTENDED TO BE A COMPLETE"
+printMsg "END-TO-END INVENTORY MANAGEMENT SOLUTION."
+printMsg ""
+printMsg "This script will download and install the Intel® RSP SW Toolkit-"
+printMsg "Controller dockerized Java application along with its dependencies."
+printMsg "This script is designed to run on Debian 10 or Ubuntu 18.04 LTS."
+printMsg ""
 
-echo "Checking Internet connectivity"
-echo
-PING1=$(ping -c 1 8.8.8.8)
-PING2=$(ping -c 1 pool.ntp.org)
+printDatedMsg "Checking Internet connectivity"
+PING1="$(ping -c 1 8.8.8.8)"
+
 if [[ $PING1 == *"unreachable"* ]]; then
-    echo "ERROR: No network connection found, exiting."
+    printDatedErrMsg "ERROR: No network connection found, exiting."
     exit 1
 elif [[ $PING1 == *"100% packet loss"* ]]; then
-    echo "ERROR: No Internet connection found, exiting."
+    printDatedErrMsg "ERROR: No Internet connection found, exiting."
     exit 1
-else
-    if [[ $PING2 == *"not known"* ]]; then
-        echo "ERROR: Cannot resolve pool.ntp.org."
-        echo "Is your network blocking IGMP ping?"
-        echo "exiting"
-        exit 1
-    else
-        echo "Connectivity OK"
-    fi
 fi
 
-echo
-PROJECTS_DIR=$HOME/Projects
+PING2="$(ping -c 1 pool.ntp.org)"
+if [[ $PING2 == *"not known"* ]]; then
+    printDatedErrMsg "ERROR: Cannot resolve pool.ntp.org."
+    printDatedInfoMsg "INFO: Is your network blocking IGMP ping?"
+    printDatedErrMsg "ERROR: exiting"
+    exit 1
+else
+    printDatedOkMsg "Connectivity OK"
+fi
+
+printDatedMsg "Checking for docker..."
+command -v docker
+if [ $? -ne 0 ]; then
+    printDatedErrMsg "ERROR: docker not found, exiting."
+    exit 1
+fi
+
+printDatedMsg "Checking for docker-compose..."
+command -v docker-compose
+if [ $? -ne 0 ]; then
+    printDatedErrMsg "ERROR: docker-compose not found, exiting."
+    exit 1
+fi
+
+PROJECTS_DIR=$HOME/projects
 if [ ! -d "$PROJECTS_DIR" ]; then
-    echo "Creating the projects directory..."
-    mkdir $PROJECTS_DIR
+    printDatedMsg "Creating the projects directory..."
+    mkdir "$PROJECTS_DIR"
 fi
-cd $PROJECTS_DIR
 
 echo
-GIT_VERSION=$(git --version)
+GIT_VERSION="$(git --version)"
 if [[ $GIT_VERSION == *"git version"* ]]; then
-    echo "Cloning the RSP SW Toolkit - Installer..."
+    printDatedOkMsg "OK: Found git..."
 else
-    echo "git did not install properly, exiting."
+    printDatedErrMsg "ERROR: git not found, exiting."
     exit 1
 fi
+
+#clone the installer
 if [ ! -d "$PROJECTS_DIR/rsp-sw-toolkit-installer" ]; then
-    cd $PROJECTS_DIR
+    cd "$PROJECTS_DIR" || {
+        printDatedErrMsg "ERROR: Can't find the projects directory"
+        exit 1
+    }
+    printDatedMsg "Going to clone the RSP SW Toolkit - Installer..."
     git clone https://github.com/intel/rsp-sw-toolkit-installer.git
 fi
-cd $PROJECTS_DIR/rsp-sw-toolkit-installer
+cd "$PROJECTS_DIR/rsp-sw-toolkit-installer" || {
+    printDatedErrMsg "ERROR: Can't find the projects toolkit installer directory"
+    exit 1
+}
 git pull
+
+# clone the controller
+if [ ! -d "$PROJECTS_DIR/rsp-sw-toolkit-gw" ]; then
+    cd "$PROJECTS_DIR" || {
+        printDatedErrMsg "ERROR: Can't find the projects directory"
+        exit 1
+    }
+    printDatedMsg "Going to clone the RSP SW Toolkit - Controller..."
+    git clone https://github.com/intel/rsp-sw-toolkit-gw.git
+fi
 
 # we want to have some checks done for undefined variables
 set -u
 
-cd $PROJECTS_DIR/rsp-sw-toolkit-installer/docker/
-source "scripts/textutils.sh"
+cd "$PROJECTS_DIR"/rsp-sw-toolkit-installer/docker/ || {
+    printDatedErrMsg "ERROR: Can't find the installer docker directory"
+    exit 1
+}
 
 if [ "${HTTP_PROXY+x}" != "" ]; then
-	export DOCKER_BUILD_ARGS="--build-arg http_proxy='${http_proxy}' --build-arg https_proxy='${https_proxy}' --build-arg HTTP_PROXY='${HTTP_PROXY}' --build-arg HTTPS_PROXY='${HTTPS_PROXY}' --build-arg NO_PROXY='localhost,127.0.0.1'"
-	export DOCKER_RUN_ARGS="--env http_proxy='${http_proxy}' --env https_proxy='${https_proxy}' --env HTTP_PROXY='${HTTP_PROXY}' --env HTTPS_PROXY='${HTTPS_PROXY}' --env NO_PROXY='localhost,127.0.0.1'"
-	export AWS_CLI_PROXY="export http_proxy='${http_proxy}'; export https_proxy='${https_proxy}'; export HTTP_PROXY='${HTTP_PROXY}'; export HTTPS_PROXY='${HTTPS_PROXY}'; export NO_PROXY='localhost,127.0.0.1';"
+    export DOCKER_BUILD_ARGS="--build-arg http_proxy='${HTTP_PROXY}' --build-arg https_proxy='${HTTPS_PROXY}' --build-arg HTTP_PROXY='${HTTP_PROXY}' --build-arg HTTPS_PROXY='${HTTPS_PROXY}' --build-arg NO_PROXY='localhost,127.0.0.1'"
+    export DOCKER_RUN_ARGS="--env http_proxy='${HTTP_PROXY}' --env https_proxy='${HTTPS_PROXY}' --env HTTP_PROXY='${HTTP_PROXY}' --env HTTPS_PROXY='${HTTPS_PROXY}' --env NO_PROXY='localhost,127.0.0.1'"
+    export AWS_CLI_PROXY="export http_proxy='${HTTP_PROXY}'; export https_proxy='${HTTPS_PROXY}'; export HTTP_PROXY='${HTTP_PROXY}'; export HTTPS_PROXY='${HTTPS_PROXY}'; export NO_PROXY='localhost,127.0.0.1';"
 else
-	export DOCKER_BUILD_ARGS=""
-	export DOCKER_RUN_ARGS=""
-	export AWS_CLI_PROXY=""
+    export DOCKER_BUILD_ARGS=""
+    export DOCKER_RUN_ARGS=""
+    export AWS_CLI_PROXY=""
 fi
 
-# Build Managed Edge Accelerator
+# Build RSP Controller
 msg="Building the containers, this can take a few minutes..."
-printBanner $msg
-logMsg $msg
-source "scripts/buildRspGw.sh"
+printBanner "$msg"
+logMsg "$msg"
+source scripts/buildRspGw.sh
 
-msg="Run 'docker-compose -f docker-compose.yml up' to start"
-printBanner $msg
-docker-compose -p rsp -f $PROJECTS_DIR/rsp-sw-toolkit-installer/docker/compose/docker-compose.yml up -d
-
+msg="Bringing up RSP using docker-compose"
+printBanner "$msg"
+sudo docker-compose -p rsp -f "$PROJECTS_DIR"/rsp-sw-toolkit-installer/docker/compose/docker-compose.yml up -d

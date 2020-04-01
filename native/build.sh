@@ -59,11 +59,12 @@ elif [[ $PING1 == *"100% packet loss"* ]]; then
     printDatedErrMsg "ERROR: No Internet connection found, exiting."
     exit 1
 fi
+
 PING2="$(ping -c 1 pool.ntp.org)"
 if [[ $PING2 == *"not known"* ]]; then
     printDatedErrMsg "ERROR: Cannot resolve pool.ntp.org."
-    printDatedInfoMsg "Is your network blocking IGMP ping?"
-    printDatedErrMsg "exiting"
+    printDatedInfoMsg "INFO: Is your network blocking IGMP ping?"
+    printDatedErrMsg "ERROR: exiting"
     exit 1
 else
     printDatedOkMsg "Connectivity OK"
@@ -71,7 +72,7 @@ fi
 
 echo
 printDatedMsg "Updating apt..."
-sudo apt update
+sudo apt update >>/dev/null 2>&1
 
 printDatedMsg "Installing the following dependencies..."
 printDatedMsg "    tar openjdk git gradle"
@@ -92,46 +93,39 @@ if [ ! -d "$PROJECTS_DIR" ]; then
     printDatedMsg "Creating the projects directory..."
     mkdir "$PROJECTS_DIR"
 fi
-cd "$PROJECTS_DIR" || {
-    printDatedErrMsg "Can't find the projects directory"
-    exit 1
-}
 
 echo
 GIT_VERSION="$(git --version)"
 if [[ $GIT_VERSION == *"git version"* ]]; then
-    printDatedOkMsg "Found git..."
+    printDatedOkMsg "OK: Found git..."
 else
-    printDatedErrMsg "git did not install properly, exiting."
+    printDatedErrMsg "ERROR: git not found, exiting."
     exit 1
 fi
+
+# clone the controller
 if [ ! -d "$PROJECTS_DIR/rsp-sw-toolkit-gw" ]; then
     cd "$PROJECTS_DIR" || {
-        printDatedErrMsg "Can't find the projects directory"
+        printDatedErrMsg "ERROR: Can't find the projects directory"
         exit 1
     }
     printDatedMsg "Going to clone the RSP SW Toolkit - Controller..."
     git clone https://github.com/intel/rsp-sw-toolkit-gw.git
 fi
-cd "$PROJECTS_DIR/rsp-sw-toolkit-gw" || {
-    printDatedErrMsg "Can't find the projects toolkit directory"
-    exit 1
-}
-git pull
 
 echo
 GRADLE_VERSION="$(gradle --version)"
 if [[ $GRADLE_VERSION == *"Revision"* ]]; then
     printDatedMsg "Deploying the RSP SW Toolkit - Controller..."
+    gradle clean deploy
 else
-    printDatedErrMsg "gradle did not install properly, exiting."
+    printDatedErrMsg "ERROR: gradle did not install properly, exiting."
     exit 1
 fi
-gradle clean deploy
 
 JAVA_HOME="$(type -p java)"
 if [[ $JAVA_HOME == *"java"* ]]; then
-    echo
+    printDatedOkMsg "OK: Found java" 
 else
     printDatedErrMsg "java did not install properly, exiting."
     exit 1
@@ -166,12 +160,15 @@ if [[ $END_OF_FILE == *"$NTP_STRING1"* ]]; then
 else
     printDatedMsg "Updating $NTP_FILE"
     cp "$NTP_FILE" "$TMP_FILE"
-    echo >>"$TMP_FILE"
-    echo "# If you want to serve time locally with no Internet," >>"$TMP_FILE"
-    echo "# uncomment the next two lines" >>"$TMP_FILE"
-    echo "$NTP_STRING1" >>"$TMP_FILE"
-    echo "$NTP_STRING2" >>"$TMP_FILE"
-    echo >>"$TMP_FILE"
+    {
+        echo ""
+        echo "# If you want to serve time locally with no Internet,"
+        echo "# uncomment the next two lines"
+        echo "# $NTP_STRING1"
+        echo "# $NTP_STRING2"
+        echo ""
+    } >> "$TMP_FILE"
+
     sudo cp "$TMP_FILE" "$NTP_FILE"
     sudo /etc/init.d/ntp restart
 fi
