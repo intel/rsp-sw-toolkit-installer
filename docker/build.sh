@@ -60,6 +60,15 @@ else
     docker --version
 fi
 
+printDatedMsg "Installing the following dependencies..."
+printDatedMsg "    curl ntpdate git"
+echo
+sudo apt -y install curl ntpdate git
+if [ $? -ne 0 ]; then
+    printDatedErrMsg "ERROR: There was a problem installing dependencies, exiting"
+    exit 1
+fi
+
 printDatedMsg "Checking for docker-compose..."
 command -v docker-compose
 if [ $? -ne 0 ]; then
@@ -75,15 +84,6 @@ if [ $? -ne 0 ]; then
 else
     printDatedOkMsg "OK: found docker-compose"
     docker-compose --version
-fi
-
-printDatedMsg "Installing the following dependencies..."
-printDatedMsg "    curl ntpdate git"
-echo
-sudo apt -y install curl ntpdate git
-if [ $? -ne 0 ]; then
-    printDatedErrMsg "ERROR: There was a problem installing dependencies, exiting"
-    exit 1
 fi
 
 PROJECTS_DIR=$HOME/projects
