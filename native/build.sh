@@ -117,6 +117,10 @@ echo
 GRADLE_VERSION="$(gradle --version)"
 if [[ $GRADLE_VERSION == *"Revision"* ]]; then
     printDatedMsg "Deploying the RSP SW Toolkit - Controller..."
+    cd "$PROJECTS_DIR/rsp-sw-toolkit-gw" || {
+        printDatedErrMsg "Can't find the projects toolkit directory"
+        exit 1
+    }
     gradle clean deploy
 else
     printDatedErrMsg "ERROR: gradle did not install properly, exiting."
