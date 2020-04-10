@@ -145,6 +145,13 @@ printBanner "$msg"
 logMsg "$msg"
 source scripts/buildRspGw.sh
 
+printDatedMsg "Setting up deploy directory..."
+DEPLOY_DIR="$HOME/deploy/rsp-sw-toolkit-gw"
+mkdir -p "$DEPLOY_DIR"
+cp scripts/run.sh "$DEPLOY_DIR/run.sh"
+cp compose/docker-compose.yml "$DEPLOY_DIR/docker-compose.yml"
+
+
 msg="Bringing up RSP using docker-compose"
 printBanner "$msg"
 sudo docker-compose -p rsp -f "$PROJECTS_DIR"/rsp-sw-toolkit-installer/docker/compose/docker-compose.yml up -d
